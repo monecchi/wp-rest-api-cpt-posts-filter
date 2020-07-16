@@ -1,4 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
+import axios from "axios";
 
 const DishesList = props => {
   const [dishesData, setDishesData] = useState({
@@ -7,7 +8,7 @@ const DishesList = props => {
     perPage: 25
   });
 
-  //this.props = dishesData;
+  this.props = dishesData;
 
   useEffect(() => {
     setDishesData({ loading: true });
@@ -16,21 +17,22 @@ const DishesList = props => {
     const dishesEndpoint = "/food_menu/";
 
     async function loadData() {
-      const response = await fetch(restURL);
-      if (!response.ok) {
-        // oups! something went wrong
-        //return console.log(response);
-      }
-
-      const allDishes = await response.json();
-      console.log(JSON.stringify(allDishes));
-      setDishesData({ loading: false, dishes: allDishes });
+      axios
+        .get(restURL)
+        .then(response => {
+          const allDishes = response.data;
+          console.log(response);
+          setDishesData({ loading: false, dishes: allDishes });
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
 
     loadData();
   }, [setDishesData]);
 
-  const { dishes, loading } = dishesData;
+  const { dishes } = dishesData;
 
   return (
     <>
@@ -38,12 +40,10 @@ const DishesList = props => {
         Pizza, pasta & other delicous meals
       </div>
 
-      {dishes && dishes.map(dish => {
-
-        {dish.title}
-
-      })}
-
+      {dishes &&
+        dishes.map((dish, index) => {
+          return <>{dish.title.rendered}</>;
+        })}
     </>
   );
 };
