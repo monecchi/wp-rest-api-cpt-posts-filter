@@ -2,6 +2,11 @@ import React, { Component, useEffect, useState } from "react";
 import renderHTML from "../../utils/htmlRender";
 import axios from "axios";
 
+//
+// react-loading-skeleton
+//
+import Skeleton from "react-loading-skeleton";
+
 const DishesList = props => {
   const [dishesData, setDishesData] = useState({
     dishes: [],
@@ -40,7 +45,10 @@ const DishesList = props => {
     loadData();
   }, [setDishesData]);
 
-  const { dishes, loading, perPage, pagesTotal, page } = dishesData;
+  const { dishes, perPage, pagesTotal, page } = dishesData;
+  const { loading } = dishesData.loading;
+
+
 
   return (
     <>
@@ -68,7 +76,7 @@ const DishesList = props => {
                 <div className="list-item" key={dish.id}>
                   <div className="list-content">
                     <div className="dish-info">
-                      <h4>{dish.title.rendered}</h4>
+                       <h4>{dish.title.rendered}</h4>
                       {renderHTML(dish.excerpt.rendered, "description")}
                     </div>
                     <div className="dish-card__container-image justify-content-end">
