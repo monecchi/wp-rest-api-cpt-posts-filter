@@ -15,17 +15,35 @@ const DishesList = props => {
     const restURL = "https://pizzariameurancho.com.br/wp-json/wp/v2/food_menu/";
     const dishesEndpoint = "/food_menu/";
 
-    fetch(restURL).then(response => {
-      const allDishes = [];
-      allDishes = response.json();
+    async function loadData() {
+      const response = await fetch(restURL);
+      if (!response.ok) {
+        // oups! something went wrong
+        return console.log(response);
+      }
+
+      const allDishes = await response.json();
       console.log(allDishes);
       setDishesData({ loading: false, dishes: allDishes });
-    });
+    }
+
+    loadData();
   }, [setDishesData]);
+
+  const { dishes, loading } = dishesData;
 
   return (
     <>
-      <div stye={{paddinBottom: "1.2rem"}}>Pizza, pasta & other delicous meals</div>
+      <div stye={{ paddinBottom: "1.2rem" }}>
+        Pizza, pasta & other delicous meals
+      </div>
+
+      {dishes && dishes.map(dish => {
+
+        {dish.title}
+
+      })}
+
     </>
   );
 };
