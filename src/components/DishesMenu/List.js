@@ -55,14 +55,32 @@ const DishesList = props => {
           {
             /*{dishes.slice(0, this.state.totalItems).map((food, index) => {*/
           }
-          if ( dish.slug && dish.slug == "vazio" || dish.slug && dish.slug == "empty" ) {
+          if (
+            (dish.slug && dish.slug == "vazio") ||
+            (dish.slug && dish.slug == "empty")
+          ) {
             return <></>;
           }
           return (
             <>
               <div className="card" key={dish.id}>
                 <div className="card-body">
-                <h4>{dish.title.rendered}</h4>
+                  <h4 className="d-flex">{dish.title.rendered}</h4>
+                  <div className="dish-card-wrapper">
+                    <div className="dish-card">
+                      <div className="dish-card__container-image">
+                        {dish.featured_image_src.thumbnail ? (
+                          <img
+                            src={dish.featured_image_src.thumbnail}
+                            alt={dish.title.rendered}
+                            className="dish-card__image"
+                          />
+                        ) : (
+                          <div className="dish-card__image" />
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </>
