@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from "react";
 
 const DishesList = props => {
   const [dishesData, setDishesData] = useState({
-    dishes: null,
+    dishes: [],
     loading: false,
     perPage: 25
   });
@@ -19,11 +19,11 @@ const DishesList = props => {
       const response = await fetch(restURL);
       if (!response.ok) {
         // oups! something went wrong
-        return console.log(response);
+        //return console.log(response);
       }
 
       const allDishes = await response.json();
-      console.log(allDishes);
+      console.log(JSON.stringify(allDishes));
       setDishesData({ loading: false, dishes: allDishes });
     }
 
@@ -34,7 +34,7 @@ const DishesList = props => {
 
   return (
     <>
-      <div stye={{ paddinBottom: "1.2rem" }}>
+      <div style={{ paddinBottom: "1.2rem" }}>
         Pizza, pasta & other delicous meals
       </div>
 
