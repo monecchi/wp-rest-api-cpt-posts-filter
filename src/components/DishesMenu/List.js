@@ -65,10 +65,9 @@ const DishesList = props => {
             <>
               <div className="card" key={dish.id}>
                 <div className="card-body">
-                  <h4 className="d-flex">{dish.title.rendered}</h4>
                   <div className="dish-card-wrapper">
-                    <div className="dish-card">
-                      <div className="dish-card__container-image">
+                    <div className="dish-card d-flex justify-content-center">
+                      <div className="dish-card__container-image" style={{ paddingRight: "1rem"}}>
                         {dish.featured_image_src.thumbnail ? (
                           <img
                             src={dish.featured_image_src.thumbnail}
@@ -79,6 +78,7 @@ const DishesList = props => {
                           <div className="dish-card__image" />
                         )}
                       </div>
+                     <h4 className="d-inline-flex">{dish.title.rendered}</h4>
                     </div>
                   </div>
                 </div>
