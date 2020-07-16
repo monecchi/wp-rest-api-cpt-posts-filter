@@ -1,4 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
+import renderHTML from "../../utils/htmlRender";
 import axios from "axios";
 
 const DishesList = props => {
@@ -44,48 +45,47 @@ const DishesList = props => {
   return (
     <>
       <div style={{ paddingBottom: "2rem" }}>
-        Pizza, pasta & other delicous meals
+        Pizza, pasta & more delicious meals
       </div>
 
-      {dishes &&
-        dishes.map((dish, index) => {
-          {
-            /*dishes && dishes.map((dish, index) => {*/
-          }
-          {
-            /*{dishes.slice(0, this.state.totalItems).map((food, index) => {*/
-          }
-          if (
-            (dish.slug && dish.slug == "vazio") ||
-            (dish.slug && dish.slug == "empty")
-          ) {
-            return <></>;
-          }
-          return (
-            <>
-              <div className="card" key={dish.id}>
-                <div className="card-body">
-                  <div className="dish-card-wrapper">
-                    <div className="dish-card d-flex justify-content-center">
-                      <div className="dish-card__container-image" style={{ paddingRight: "1rem"}}>
-                        {dish.featured_image_src.thumbnail ? (
-                          <img
-                            src={dish.featured_image_src.thumbnail}
-                            alt={dish.title.rendered}
-                            className="dish-card__image"
-                          />
-                        ) : (
-                          <div className="dish-card__image" />
-                        )}
-                      </div>
-                     <h4 className="d-inline-flex">{dish.title.rendered}</h4>
+      <div className="list">
+        {dishes &&
+          dishes.map((dish, index) => {
+            {
+              /*dishes && dishes.map((dish, index) => {*/
+            }
+            {
+              /*{dishes.slice(0, this.state.totalItems).map((food, index) => {*/
+            }
+            if (
+              (dish.slug && dish.slug == "vazio") ||
+              (dish.slug && dish.slug == "empty")
+            ) {
+              return <></>;
+            }
+            return (
+              <>
+                <div className="list-item" key={dish.id}>
+                  <div className="list-content">
+                    <h4>{dish.title.rendered}</h4>
+                    {renderHTML(dish.excerpt.rendered)}
+                    <div className="dish-card__container-image justify-content-end">
+                      {dish.featured_image_src.thumbnail ? (
+                        <img
+                          src={dish.featured_image_src.thumbnail}
+                          alt={dish.title.rendered}
+                          className="dish-card__image"
+                        />
+                      ) : (
+                        <div className="dish-card__image" />
+                      )}
                     </div>
                   </div>
                 </div>
-              </div>
-            </>
-          );
-        })}
+              </>
+            );
+          })}
+      </div>
     </>
   );
 };
