@@ -5,7 +5,9 @@ const DishesList = props => {
   const [dishesData, setDishesData] = useState({
     dishes: [],
     loading: false,
-    perPage: 25
+    perPage: 25,
+    pagesTotal: 1,
+    page: 1
   });
 
   this.props = dishesData;
@@ -13,7 +15,7 @@ const DishesList = props => {
   useEffect(() => {
     setDishesData({ loading: true });
 
-    const restURL = "https://pizzariameurancho.com.br/wp-json/wp/v2/food_menu/";
+    const restURL = `https://pizzariameurancho.com.br/wp-json/wp/v2/food_menu/?per_page=${perPage}`;
     const dishesEndpoint = "/food_menu/";
 
     async function loadData() {
@@ -22,7 +24,12 @@ const DishesList = props => {
         .then(response => {
           const allDishes = response.data;
           console.log(response);
-          setDishesData({ loading: false, dishes: allDishes });
+          setDishesData({
+            dishes: allDishes,
+            loading: false,
+            pagesTotal: Number(response.headers["x-wp-totalpages"]),
+            page: page + 1
+          });
         })
         .catch(err => {
           console.log(err);
@@ -32,17 +39,34 @@ const DishesList = props => {
     loadData();
   }, [setDishesData]);
 
-  const { dishes } = dishesData;
+  const { dishes, loading, perPage, pagesTotal, page } = dishesData;
 
   return (
     <>
-      <div style={{ paddinBottom: "1.2rem" }}>
+      <div style={{ paddingBottom: "2rem" }}>
         Pizza, pasta & other delicous meals
       </div>
 
       {dishes &&
         dishes.map((dish, index) => {
-          return <>{dish.title.rendered}</>;
+          {
+            /*dishes && dishes.map((dish, index) => {*/
+          }
+          {
+            /*{dishes.slice(0, this.state.totalItems).map((food, index) => {*/
+          }
+          if ( dish.slug && dish.slug == "vazio" || dish.slug && dish.slug == "empty" ) {
+            return <></>;
+          }
+          return (
+            <>
+              <div className="card" key={dish.id}>
+                <div className="card-body">
+                <h4>{dish.title.rendered}</h4>
+                </div>
+              </div>
+            </>
+          );
         })}
     </>
   );
