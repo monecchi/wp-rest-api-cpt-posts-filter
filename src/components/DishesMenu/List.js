@@ -67,8 +67,10 @@ const DishesList = props => {
               <>
                 <div className="list-item" key={dish.id}>
                   <div className="list-content">
-                    <h4>{dish.title.rendered}</h4>
-                    {renderHTML(dish.excerpt.rendered)}
+                    <div className="dish-info">
+                      <h4>{dish.title.rendered}</h4>
+                      {renderHTML(dish.excerpt.rendered, "description")}
+                    </div>
                     <div className="dish-card__container-image justify-content-end">
                       {dish.featured_image_src.thumbnail ? (
                         <img

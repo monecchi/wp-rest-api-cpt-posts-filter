@@ -206,7 +206,7 @@ justify-content-between {
   width: 100%;
 }
 
-.list-content .description {
+.list-content .description p {
   font-size: 0.875rem;
   line-height: 1.25rem;
   overflow: hidden;
@@ -214,11 +214,18 @@ justify-content-between {
   -webkit-box-orient: vertical;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  word-break: break-word;
 }
 
 .list-content h4 {
     flex: 1 0 auto;
 }
+
+.list-content .dish-info {
+    display: flex;
+    flex-flow: column;
+}
+
 .list-content p {
     flex: 1 0 auto;
 }
