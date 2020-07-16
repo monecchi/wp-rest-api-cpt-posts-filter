@@ -1,0 +1,74 @@
+h1, p {
+  font-family: Lato;
+}
+
+.container {
+  position: relative;
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1366px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+section {
+  position: relative;
+  width: 100%;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.d-flex {
+  display: flex;
+}
+.d-block {
+  display: block;
+}
+.d-none {
+  display: none;
+}
+.d-inline-block {
+  display: inline-block;
+}
+.d-inline-flex {
+  display: inline-flex;
+}
+.hidden {
+  visibility: hidden;
+}
+.o-hidden {
+  overflow: hidden;
+}
+.o-visible {
+  overflow: visible;
+}
+.o-auto {
+  overflow: auto;
+}
+.o-scroll {
+  overflow: scroll;
+}
+.outline-none {
+  outline: 0;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+.justify-content-start {
+  justify-content: start;
+}
+.justify-content-end {
+  justify-content: end;
+}
+.align-content-center {
+  align-content: center;
+}
+.align-items-center {
+  align-items: center;
+}
+
+.text-center {
+  text-align: center !important;
+}

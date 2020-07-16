@@ -1,26 +1,33 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
-import Hello from './Hello';
-import './style.css';
+import React, { Component } from "react";
+import { render } from "react-dom";
+import "./style.scss";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      name: 'React'
+      name: "React"
     };
   }
 
   render() {
     return (
-      <div>
-        <Hello name={this.state.name} />
-        <p>
-          Start editing to see some magic happen :)
-        </p>
+      <div className="main">
+        <section className="intro">
+          <div className="container">
+            <h1 className="text-center">WordPress React</h1>
+            <p className="text-center">WP REST API Custom Post Type retrieval & filtering</p>
+          </div>
+        </section>
+
+        <section className="intro">
+          <div className="container">
+            <p>WP REST API Custom Post Type retrieval & filtering</p>
+          </div>
+        </section>
       </div>
     );
   }
 }
 
-render(<App />, document.getElementById('root'));
+render(<App />, document.getElementById("root"));
