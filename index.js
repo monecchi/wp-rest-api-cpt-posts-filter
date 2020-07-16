@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { render } from "react-dom";
 import "./style.scss";
 
+// Dishes Menu Component
+import DishesList from "./src/components/DishesMenu/List"
+
 class App extends Component {
   constructor() {
     super();
@@ -22,7 +25,8 @@ class App extends Component {
 
         <section className="intro">
           <div className="container">
-            <p>WP REST API Custom Post Type retrieval & filtering</p>
+            <p>Our Menu</p>
+            <DishesList />
           </div>
         </section>
       </div>
