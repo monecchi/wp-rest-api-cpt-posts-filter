@@ -32,7 +32,6 @@ const DishesList = props => {
       .get(restURL)
       .then(response => {
         const { dishes, loading, perPage, pagesTotal, page } = dishesData;
-        const allDishes = [];
         setDishesData({
           dishes: dishes.concat(response.data),
           loading: false,
