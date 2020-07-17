@@ -22,37 +22,39 @@ const DishesList = props => {
     page: 1
   });
 
+  //this.loadMore = this.loadMore.bind(this);
+
+  const restURL = `https://pizzariameurancho.com.br/wp-json/wp/v2/food_menu/?per_page=${dishesData.perPage}&page=${dishesData.page}`;
+  const dishesEndpoint = "/food_menu/";
+
+  const loadData = async => {
+    return axios
+      .get(restURL)
+      .then(response => {
+        const allDishes = response.data;
+        console.log(response);
+        setDishesData({
+          dishes: allDishes.concat(response.data),
+          loading: false,
+          perPage: 25,
+          pagesTotal: Number(response.headers["x-wp-totalpages"]),
+          page: dishesData.page + 1
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const loadMore = () => {
+    loadData();
+  };
+
   useEffect(() => {
     setDishesData({ loading: true });
 
-    const restURL = `https://pizzariameurancho.com.br/wp-json/wp/v2/food_menu/?per_page=${perPage}&page=${page}`;
-    const dishesEndpoint = "/food_menu/";
-
-    const loadData = async () => {
-      axios
-        .get(restURL)
-        .then(response => {
-          const allDishes = response.data;
-          console.log(response);
-          setDishesData({
-            dishes: allDishes,
-            loading: false,
-            pagesTotal: Number(response.headers["x-wp-totalpages"]),
-            page: page + 1
-          });
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
-
     loadData();
   }, [setDishesData]);
-
-  const loadMore = () => {
-      loadData();
-  }
-
 
   const { dishes, perPage, pagesTotal, page } = dishesData;
   const { loading } = dishesData.loading;
@@ -83,7 +85,7 @@ const DishesList = props => {
                 <div className="list-item" key={dish.id}>
                   <div className="list-content">
                     <div className="dish-info">
-                       <h4>{dish.title.rendered}</h4>
+                      <h4>{dish.title.rendered}</h4>
                       {renderHTML(dish.excerpt.rendered, "description")}
                     </div>
                     <div className="dish-card__container-image justify-content-end">
@@ -103,6 +105,32 @@ const DishesList = props => {
             );
           })}
       </div>
+
+      {/* this.state.per_page < this.state.foods.length &&*/}
+      {page <= pagesTotal && dishes.length && (
+        <>
+          <div
+            style={{
+              width: "100%",
+              paddingTop: "1.2rem",
+              paddingBottom: "1.2rem"
+            }}
+          >
+            <button
+              onClick={() => loadMore()}
+              type="button"
+              role="button"
+              className="btn btn--default btn--white btn--size-m btn--full-width rating-container__load-more"
+              aria-label="More items"
+              target=""
+              rel=""
+              style={{ outline: "0" }}
+            >
+              More dishes
+            </button>
+          </div>
+        </>
+      )}
     </>
   );
 };
