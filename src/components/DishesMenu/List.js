@@ -1,6 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
-import renderHTML from "../../utils/htmlRender";
 import axios from "axios";
+import renderHTML from "../../utils/htmlRender";
+//import ListLoading from "./ListLoading";
 
 //
 // react-loading-skeleton
@@ -13,7 +14,7 @@ import Skeleton from "react-loading-skeleton";
 // Handles load more posts
 // Handles post filtering
 //
-const DishesList = props => {
+const DishesList = (props) => {
   const [dishesData, setDishesData] = useState({
     dishes: [],
     loading: false,
@@ -28,12 +29,12 @@ const DishesList = props => {
   const dishesEndpoint = "/food_menu/";
 
   const loadData = async => {
+    setDishesData({ loading: true });
     return axios
       .get(restURL)
       .then(response => {
-        const { dishes, loading, perPage, pagesTotal, page } = dishesData;
         setDishesData({
-          dishes: dishes.concat(response.data),
+          dishes: dishesData.dishes.concat(response.data),
           loading: false,
           perPage: 25,
           pagesTotal: Number(response.headers["x-wp-totalpages"]),
@@ -50,19 +51,18 @@ const DishesList = props => {
   };
 
   useEffect(() => {
-    setDishesData({ loading: true });
 
     loadData();
   }, [setDishesData]);
 
+
   const { dishes, loading, perPage, pagesTotal, page } = dishesData;
+  const totalItems = Array.from(Array(25).keys());
+
+  if(loading) return <div><p>Loading...</p></div>;
 
   return (
     <>
-      <div style={{ paddingBottom: "2rem" }}>
-        Pizza, pasta & more delicious meals
-      </div>
-
       <div className="list">
         {dishes &&
           dishes.map((dish, index) => {
@@ -118,7 +118,7 @@ const DishesList = props => {
               onClick={() => loadMore()}
               type="button"
               role="button"
-              className="btn btn--white btn--size-m btn--full-width restaurants-list__load-more"
+              className="btn btn--default btn--white btn--size-m btn--full-width restaurants-list__load-more"
               aria-label="More items"
               target=""
               rel=""

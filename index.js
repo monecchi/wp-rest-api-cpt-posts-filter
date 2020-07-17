@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import "./style.scss";
 
 // Dishes Menu Component
-import DishesList from "./src/components/DishesMenu/List"
+import DishesList from "./src/components/DishesMenu/List";
 
 class App extends Component {
   constructor() {
@@ -19,13 +19,18 @@ class App extends Component {
         <section className="intro">
           <div className="container">
             <h1 className="text-center">WordPress React</h1>
-            <p className="text-center">WP REST API Custom Post Type retrieval & filtering</p>
+            <p className="text-center">
+              WP REST API Custom Post Type retrieval & filtering
+            </p>
           </div>
         </section>
 
         <section className="intro">
           <div className="container">
             <p>Our Menu</p>
+            <div style={{ paddingBottom: "2rem" }}>
+              Pizza, pasta & more delicious meals
+            </div>
             <DishesList />
           </div>
         </section>
