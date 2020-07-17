@@ -96,7 +96,7 @@ const App = () => {
         setDishes({
           foods: dishes.foods.concat(response.data),
           loading: false,
-          perPage: 16,
+          perPage: 25,
           pagesTotal: Number(response.headers["x-wp-totalpages"]),
           page: page + 1
         });
