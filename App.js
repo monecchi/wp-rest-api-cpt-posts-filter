@@ -1,37 +1,43 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 
-import youtubeData from "./data";
+//import youtubeData from "./data";
 
-import "./App.css";
+//import "./styles.scss";
+import "./App.scss";
 
-const Card = ({ item, channel }) => {
+const Card = ({ item }) => {
   return (
     <li className="card">
       <a
-        href={`https://www.youtube.com/watch?v=${item.id}`}
+        href={item.link}
         target="_blank"
         rel="noopener noreferrer"
         className="card-link"
       >
-        <img src={item.image} alt={item.title} className="card-image" />
-        <h4 className="card-title">{item.title}</h4>
+        <img
+          src={item.featured_image_src.thumbnail}
+          alt={item.title}
+          className="card-image"
+        />
+        <h4 className="card-title">{item.title.rendered}</h4>
         <p className="card-channel">
-          <i>{channel}</i>
+          <i>{item.excerpt.rendered}</i>
         </p>
         <div className="card-metrics">
-          {item.views} &bull; {item.published}
+          {item.dish_prices[0] ? item.dish_prices[0].preco : ""}
         </div>
       </a>
     </li>
   );
 };
 
-const CardList = ({ list }) => {
+const CardList = ({ foods }) => {
   return (
     <ul className="list">
-      {list.items.map((item, index) => {
-        return <Card key={index} item={item} channel={list.channel} />;
+      {foods.map((item, index) => {
+        return <Card key={item.id} item={item} />;
       })}
     </ul>
   );
@@ -46,8 +52,8 @@ const CardSkeleton = () => {
       </h2>
 
       <ul className="list">
-        {Array(9)
-          .fill()
+        {Array(25)
+        .fill()
           .map((item, index) => (
             <li className="card" key={index}>
               <Skeleton height={180} />
@@ -68,33 +74,81 @@ const CardSkeleton = () => {
 };
 
 const App = () => {
-  const [videos, setVideos] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [dishes, setDishes] = useState({
+    foods: [],
+    loading: false,
+    perPage: 25,
+    pagesTotal: 1,
+    page: 1
+  });
+
+  const restURL = `https://pizzariameurancho.com.br/wp-json/wp/v2/food_menu/?per_page=${
+    dishes.perPage
+  }&page=${dishes.page}`;
+
+  const loadData = async => {
+    setDishes({ loading: true });
+    return axios
+      .get(restURL)
+      .then(response => {
+        setDishes({
+          foods: dishes.foods.concat(response.data),
+          loading: false,
+          perPage: 25,
+          pagesTotal: Number(response.headers["x-wp-totalpages"]),
+          page: page + 1
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   // Load this effect on mount
   useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => {
-      setVideos(youtubeData);
-      setLoading(false);
-    }, 2000);
-    // Cancel the timer while unmounting
-    return () => clearTimeout(timer);
-  }, []);
+    loadData();
+  }, [setDishes]);
+
+  const loadMore = () => {
+    loadData();
+  };
+
+  const { foods, loading, perPage, pagesTotal, page } = dishes;
 
   return (
     <div className="App">
       {loading && <CardSkeleton />}
-      {!loading &&
-        videos.map((list, index) => {
-          return (
-            <section key={index}>
-              <h2 className="section-title">{list.section}</h2>
-              <CardList list={list} />
-              <hr />
-            </section>
-          );
-        })}
+      {!loading && foods.length && (
+        <section>
+          <h2 className="section-title">Our Menu</h2>
+          <CardList foods={foods} />
+          <hr />
+          {page <= pagesTotal && foods.length && (
+            <>
+              <div
+                style={{
+                  width: "100%",
+                  paddingTop: "1.2rem",
+                  paddingBottom: "1.2rem"
+                }}
+              >
+                <button
+                  onClick={() => loadMore()}
+                  type="button"
+                  role="button"
+                  className="btn btn--default btn--white btn--size-m btn--full-width restaurants-list__load-more"
+                  aria-label="More items"
+                  target=""
+                  rel=""
+                  style={{ outline: "0" }}
+                >
+                  More dishes
+                </button>
+              </div>
+            </>
+          )}
+        </section>
+      )}
     </div>
   );
 };
