@@ -44,7 +44,8 @@ const CardList = ({ foods }) => {
 };
 
 // Skeleton component
-const CardSkeleton = ({loading}) => {
+const CardSkeleton = ({isLoading}) => {
+  if (isLoading)
   return (
     <section>
       <h2 className="section-title">
@@ -137,7 +138,7 @@ const App = () => {
 
   return (
     <div className="App">
-      {loading && <CardSkeleton loading={loading} foods={foods} />}
+      {loading && <CardSkeleton isLoading={dishes.loading} />}
       {!loading && foods.length && (
         <section>
           <h2 className="section-title">Our Menu</h2>
