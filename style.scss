@@ -76,6 +76,63 @@ section {
   padding-bottom: 2rem;
 }
 
+// buttons
+
+button, [type="button"], [type="reset"], [type="submit"] {
+    -webkit-appearance: button;
+}
+
+button, select {
+  text-transform: none;
+}
+
+button, input, optgroup, select, textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.btn {
+    background: transparent;
+    text-decoration: none;
+    color: #ea1d2c;
+    border: none;
+    padding: 0 20px;
+    border-radius: 4px;
+    margin: 3px 0;
+    height: 50px;
+    font-weight: 500;
+    transition: 100ms;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+
+    &.btn--full-width {
+      width: 100%;
+    }
+}
+
+.btn--white {
+    background: #fff;
+    color: #ea1d2c;
+}
+
+.btn--default {
+    background: #ea1d2c;
+    color: #fff;
+}
+
+@media only screen and (min-width: 960px) {
+  .btn {
+      cursor: pointer;
+  }
+}
+
+
 // utilities 
 .d-flex {
   display: flex;

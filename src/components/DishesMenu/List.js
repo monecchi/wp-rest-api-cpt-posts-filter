@@ -7,6 +7,12 @@ import axios from "axios";
 //
 import Skeleton from "react-loading-skeleton";
 
+//
+// Dishes Menu Component
+// Retrieves WordPress "food_menu" custom post type
+// Handles load more posts
+// Handles post filtering
+//
 const DishesList = props => {
   const [dishesData, setDishesData] = useState({
     dishes: [],
@@ -16,15 +22,13 @@ const DishesList = props => {
     page: 1
   });
 
-  this.props = dishesData;
-
   useEffect(() => {
     setDishesData({ loading: true });
 
-    const restURL = `https://pizzariameurancho.com.br/wp-json/wp/v2/food_menu/?per_page=${perPage}`;
+    const restURL = `https://pizzariameurancho.com.br/wp-json/wp/v2/food_menu/?per_page=${perPage}&page=${page}`;
     const dishesEndpoint = "/food_menu/";
 
-    async function loadData() {
+    const loadData = async () => {
       axios
         .get(restURL)
         .then(response => {
@@ -45,10 +49,13 @@ const DishesList = props => {
     loadData();
   }, [setDishesData]);
 
+  const loadMore = () => {
+      loadData();
+  }
+
+
   const { dishes, perPage, pagesTotal, page } = dishesData;
   const { loading } = dishesData.loading;
-
-
 
   return (
     <>
