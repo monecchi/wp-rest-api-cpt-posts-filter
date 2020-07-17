@@ -7,26 +7,26 @@ import Skeleton from "react-loading-skeleton";
 //import "./styles.scss";
 import "./App.scss";
 
-const Card = ({ item }) => {
+const Card = ({ food }) => {
   return (
-    <li className="card">
+    <li className="card" key={food.id}>
       <a
-        href={item.link}
+        href={food.link}
         target="_blank"
         rel="noopener noreferrer"
         className="card-link"
       >
         <img
-          src={item.featured_image_src.thumbnail}
-          alt={item.title}
+          src={food.featured_image_src.thumbnail}
+          alt={food.title}
           className="card-image"
         />
-        <h4 className="card-title">{item.title.rendered}</h4>
+        <h4 className="card-title">{food.title.rendered}</h4>
         <p className="card-channel">
-          <i>{item.excerpt.rendered}</i>
+          <i>{food.excerpt.rendered}</i>
         </p>
         <div className="card-metrics">
-          {item.dish_prices[0] ? item.dish_prices[0].preco : ""}
+          {food.dish_prices[0] ? food.dish_prices[0].preco : ""}
         </div>
       </a>
     </li>
@@ -36,15 +36,15 @@ const Card = ({ item }) => {
 const CardList = ({ foods }) => {
   return (
     <ul className="list">
-      {foods.map((item, index) => {
-        return <Card key={item.id} item={item} />;
+      {foods.map((food, index) => {
+        return <Card key={index} food={food} />;
       })}
     </ul>
   );
 };
 
 // Skeleton component
-const CardSkeleton = () => {
+const CardSkeleton = ({loading}) => {
   return (
     <section>
       <h2 className="section-title">
@@ -54,7 +54,7 @@ const CardSkeleton = () => {
       <ul className="list">
         {Array(25)
         .fill()
-          .map((item, index) => (
+          .map((num, index) => (
             <li className="card" key={index}>
               <Skeleton height={180} />
               <h4 className="card-title">
@@ -82,9 +82,27 @@ const App = () => {
     page: 1
   });
 
-  const restURL = `https://pizzariameurancho.com.br/wp-json/wp/v2/food_menu/?per_page=${
-    dishes.perPage
-  }&page=${dishes.page}`;
+  const { foods, loading, perPage, pagesTotal, page } = dishes;
+
+  const restURL = `https://pizzariameurancho.com.br/wp-json/wp/v2/food_menu/?per_page=${perPage}&page=${page}`;
+
+  const getPosts = () => {
+    setDishes({ loading: true });
+
+    return axios.get(restURL).then(
+      response => {
+        console.log(response);
+        setDishes({
+          foods: dishes.foods.concat(response.data),
+          loading: false,
+          perPage: 16,
+          pagesTotal: Number(response.headers["x-wp-totalpages"]),
+          page: page + 1
+        });
+      }).catch(err => {
+        console.log(err);
+      });
+  }
 
   const loadData = async => {
     setDishes({ loading: true });
@@ -106,18 +124,20 @@ const App = () => {
 
   // Load this effect on mount
   useEffect(() => {
-    loadData();
+     getPosts();
+    //loadData();
   }, [setDishes]);
 
   const loadMore = () => {
-    loadData();
+    getPosts();
+    //loadData();
   };
 
   const { foods, loading, perPage, pagesTotal, page } = dishes;
 
   return (
     <div className="App">
-      {loading && <CardSkeleton />}
+      {loading && <CardSkeleton loading={loading} foods={foods} />}
       {!loading && foods.length && (
         <section>
           <h2 className="section-title">Our Menu</h2>
@@ -137,7 +157,7 @@ const App = () => {
                   type="button"
                   role="button"
                   className="btn btn--default btn--white btn--size-m btn--full-width restaurants-list__load-more"
-                  aria-label="More items"
+                  aria-label="More foods"
                   target=""
                   rel=""
                   style={{ outline: "0" }}
