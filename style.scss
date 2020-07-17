@@ -78,6 +78,13 @@ section {
 
 // buttons
 
+.restaurants-list__load-more {
+    background: transparent;
+    border: 1px solid #eaeaea;
+    font-size: 1rem;
+    font-weight: normal;
+}
+
 button, [type="button"], [type="reset"], [type="submit"] {
     -webkit-appearance: button;
 }
@@ -127,9 +134,26 @@ button, input, optgroup, select, textarea {
 }
 
 @media only screen and (min-width: 960px) {
+
   .btn {
       cursor: pointer;
   }
+
+  &.btn--default {
+    
+    &:hover:enabled {
+      background: #c2121f;
+    }
+
+    .btn--white {
+      &:hover:enabled {
+        color: #fff;
+        background: #ea1d2c;
+      }
+    }
+
+  }
+  
 }
 
 

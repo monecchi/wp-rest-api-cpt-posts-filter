@@ -118,7 +118,7 @@ const DishesList = props => {
               onClick={() => loadMore()}
               type="button"
               role="button"
-              className="btn btn--default btn--white btn--size-m btn--full-width rating-container__load-more"
+              className="btn btn--white btn--size-m btn--full-width restaurants-list__load-more"
               aria-label="More items"
               target=""
               rel=""
