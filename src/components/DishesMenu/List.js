@@ -31,14 +31,14 @@ const DishesList = props => {
     return axios
       .get(restURL)
       .then(response => {
-        const allDishes = response.data;
-        console.log(response);
+        const { dishes, loading, perPage, pagesTotal, page } = dishesData;
+        const allDishes = [];
         setDishesData({
-          dishes: allDishes.concat(response.data),
+          dishes: dishes.concat(response.data),
           loading: false,
           perPage: 25,
           pagesTotal: Number(response.headers["x-wp-totalpages"]),
-          page: dishesData.page + 1
+          page: page + 1
         });
       })
       .catch(err => {
@@ -56,8 +56,7 @@ const DishesList = props => {
     loadData();
   }, [setDishesData]);
 
-  const { dishes, perPage, pagesTotal, page } = dishesData;
-  const { loading } = dishesData.loading;
+  const { dishes, loading, perPage, pagesTotal, page } = dishesData;
 
   return (
     <>
