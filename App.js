@@ -8,6 +8,11 @@ import Skeleton from "react-loading-skeleton";
 import "./App.scss";
 
 const Card = ({ food }) => {
+
+  const { id, title, slug, excerpt, featured_image_src, dish_prices } = food;
+
+  const foodPic = featured_image_src.thumbnail || "https://pizzariameurancho.com.br/wp-content/uploads/2018/09/pizza-restaurant-pattern-light-01.png";
+
   return (
     <li className="card" key={food.id}>
       <a
@@ -17,7 +22,7 @@ const Card = ({ food }) => {
         className="card-link"
       >
         <img
-          src={food.featured_image_src.thumbnail}
+          src={foodPic}
           alt={food.title}
           className="card-image"
         />
@@ -33,10 +38,11 @@ const Card = ({ food }) => {
   );
 };
 
-const CardList = ({ foods }) => {
+const CardList = ({ foods }, ...dishes) => {
   return (
     <ul className="list">
-      {foods.map((food, index) => {
+      {/*{foods.map((food, index) => {*/}
+        {foods.slice(1, dishes.itemsTotal).map((food, index) => {
         return <Card key={index} food={food} />;
       })}
     </ul>
@@ -78,12 +84,13 @@ const App = () => {
   const [dishes, setDishes] = useState({
     foods: [],
     loading: false,
+    itemsTotal: 10,
     perPage: 25,
     pagesTotal: 1,
     page: 1
   });
 
-  const { foods, loading, perPage, pagesTotal, page } = dishes;
+  const { foods, loading, itemsTotal, perPage, pagesTotal, page } = dishes;
 
   const restURL = `https://pizzariameurancho.com.br/wp-json/wp/v2/food_menu/?per_page=${perPage}&page=${page}`;
 
@@ -96,9 +103,10 @@ const App = () => {
         setDishes({
           foods: dishes.foods.concat(response.data),
           loading: false,
+          itemsTotal: Number(response.headers["x-wp-total"]),
           perPage: 25,
           pagesTotal: Number(response.headers["x-wp-totalpages"]),
-          page: page + 1
+          page: page + 1,
         });
       }).catch(err => {
         console.log(err);
@@ -113,6 +121,7 @@ const App = () => {
         setDishes({
           foods: dishes.foods.concat(response.data),
           loading: false,
+          itemsTotal: Number(response.headers["x-wp-total"]),
           perPage: 25,
           pagesTotal: Number(response.headers["x-wp-totalpages"]),
           page: page + 1
@@ -134,7 +143,7 @@ const App = () => {
     //loadData();
   };
 
-  const { foods, loading, perPage, pagesTotal, page } = dishes;
+  const { foods, loading, itemsTotal, perPage, pagesTotal, page } = dishes;
 
   return (
     <div className="App">
@@ -142,7 +151,7 @@ const App = () => {
       {!loading && foods.length && (
         <section>
           <h2 className="section-title">Our Menu</h2>
-          <CardList foods={foods} />
+          <CardList dishes={dishes} foods={foods} />
           <hr />
           {page <= pagesTotal && foods.length && (
             <>
